@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: guardian
+spec:
+  selector:
+    matchLabels:
+      app: guardian
+  template:
+    metadata:
+      labels:
+        app: guardian
+    spec:
+      containers:
+      - name:  guardian
+        image: ghcr.io/s1ntaxe770r/guardian:v1
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gopher-quote-stats-svc
+spec:
+  selector:
+    app: gopher-quote-stats
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
